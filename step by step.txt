@@ -1,0 +1,231 @@
+https://telkomuniversityofficial-my.sharepoint.com/:f:/g/personal/dijaamirah_telkomuniversity_ac_id/Eiq9WGBNUyxOikuUJT7nLs8B144dDOc5mmCkXghaMmBhgw?e=7FyqOt
+
+---
+
+# 🚀 **Rencana Proses Pengolahan Data (Data Processing Pipeline) — FINAL & SEMPURNA**
+
+Pipeline ini terdiri dari **10 tahap**, mulai dari data mentah sampai evaluasi model.
+
+---
+
+# **1️⃣ Pengumpulan Data**
+
+Data yang digunakan berasal dari:
+
+* Simulasi (NS3 / Packet Tracer / protokol IoT)
+* Data eksperimen lokal
+* Dataset sintetis (jika diperlukan)
+
+**Fitur (Input):**
+
+* E2E Delay
+* Latency
+* Throughput
+* Packet Delivery Ratio (PDR)
+* Delay-Client
+* Delay-Server
+* Energy
+
+**Label (Output – kategorikal):**
+
+* Normal
+* Energi Error
+* Komunikasi Error
+* Routing Error
+* Loop Error
+* Gateway Error
+
+---
+
+# **2️⃣ Validasi Struktur Data**
+
+Sebelum cleaning, pengecekan dilakukan untuk memastikan:
+
+* format kolom konsisten
+* tipe data (float/int) sesuai
+* tidak ada string/karakter di kolom numerik
+* timestamp (jika ada) dalam format benar
+
+---
+
+# **3️⃣ Data Cleaning**
+
+Meliputi:
+
+### ✔ Handling Missing Values
+
+* metode: mean/median atau interpolasi (jika time-series)
+
+### ✔ Outlier Detection
+
+Gunakan:
+
+* IQR method
+* Z-score
+* atau batas realistis (contoh: latency > 1500ms dianggap noise)
+
+### ✔ Duplicate Removal
+
+Menghapus data ganda agar tidak bias.
+
+---
+
+# **4️⃣ Feature Engineering (Tambahan Penting)**
+
+Tahapan ini opsional tapi sangat meningkatkan akurasi model:
+
+### ✔ Membuat fitur baru seperti:
+
+* Retransmission Rate → dari packet loss & throughput
+* Delay Variation (jitter) → Latency fluctuation
+* Throughput Ratio → actual / expected
+
+### ✔ Mengubah Delay-Client & Delay-Server
+
+Jika Delay-Client + Delay-Server > E2E Delay (tidak wajar) → tandai error data.
+
+Fitur engineering ini memperkuat model *tree-based, SVM, dan fuzzy logic*.
+
+---
+
+# **5️⃣ Rule-Based Labeling (Penting untuk penelitianmu)**
+
+Labeling dilakukan menggunakan **aturan otomatis** berdasarkan pola berikut:
+
+### Contoh:
+
+```
+IF Energy < 20% AND Throughput ↓ THEN label = Energi Error
+IF Delay ↑ AND PacketLoss ↑ AND Throughput ↓ THEN label = Komunikasi Error
+IF E2E Delay tinggi AND PacketLoss rendah THEN label = Routing Error
+IF PacketLoss tinggi AND Energy cepat habis THEN label = Loop Error
+```
+
+Aturan dibuat dari **tabel indikator** yang sudah kamu susun.
+
+👉 Ini membuat dataset **konsisten** dan model dapat belajar pola dengan benar.
+
+---
+
+# **6️⃣ Data Balancing (Tambahan yang kamu butuhkan)**
+
+Masalah umum: dataset tidak seimbang (class imbalance).
+
+Solusi:
+
+* **Oversampling** (SMOTE, ADASYN)
+* **Undersampling** (random undersampling)
+* atau **penyesuaian proporsi di dataset sintetis**
+
+Balancing penting agar **kelas minoritas seperti Loop Error** tidak diabaikan model.
+
+---
+
+# **7️⃣ Normalisasi / Standardisasi**
+
+### ✔ Normalisasi dipakai untuk:
+
+* SVM
+* ANFIS
+* ML berbasis distance
+
+### ✔ Tidak wajib untuk:
+
+* Decision Tree
+* Random Forest
+
+Metode:
+
+* MinMaxScaler
+* StandardScaler
+
+Catatan: Normalisasi dilakukan **SETELAH** train-test split agar tidak terjadi data leakage.
+
+---
+
+# **8️⃣ Pembuatan & Pelatihan Model**
+
+Algoritma yang diuji:
+
+### ✔ Decision Tree
+
+### ✔ Random Forest
+
+### ✔ Support Vector Machine (SVM)
+
+### ✔ ANFIS / Fuzzy Logic
+
+Untuk setiap model dilakukan:
+
+* Hyperparameter tuning
+* Cross validation (k-fold)
+* Feature importance (untuk RF/Tree)
+
+---
+
+# **9️⃣ Evaluasi Model**
+
+Metode evaluasi klasik untuk multi-class classification:
+
+### ✔ Accuracy
+
+### ✔ Precision
+
+### ✔ Recall
+
+### ✔ F1-Score
+
+Tambahan penting dari saya:
+
+### ✔ Confusion Matrix → menunjukkan kesalahan antar kelas
+
+### ✔ Classification Report
+
+### ✔ Feature Importance → mengetahui fitur mana paling berpengaruh
+
+### ✔ Learning Curve → mengecek overfitting/underfitting
+
+---
+
+# **🔟 Sistem Rekomendasi Node Error**
+
+Output dari model akan digunakan untuk:
+
+### ✔ Menentukan jenis gangguan node
+
+### ✔ Memberikan rekomendasi otomatis
+
+### ✔ Menampilkan alert seperti:
+
+```
+Node 4 -> Komunikasi Error
+Rekomendasi: cek interferensi sinyal atau antenna rusak.
+```
+
+Implementasi dapat dibuat dalam:
+
+* Web (Flask/FastAPI)
+* Dashboard (Streamlit)
+* MQTT alert system
+* Log analyzer
+
+---
+
+# 🎉 **Kesimpulan — Pipeline Matang & Siap Implementasi**
+
+Berikut ringkasan rencana proses datanya yang sudah ditingkatkan:
+
+1. Pengumpulan Data
+2. Validasi Struktur
+3. Data Cleaning
+4. Feature Engineering
+5. Rule-Based Labeling
+6. Data Balancing
+7. Normalisasi
+8. Pembuatan Model (Tree, RF, SVM, ANFIS)
+9. Evaluasi lengkap (F1-score, CM, Feature Importance)
+10. Sistem Rekomendasi Node Error
+
+Ini adalah versi yang **lengkap, profesional, dan siap ditulis dalam BAB 3 metodologi**.
+
+---
